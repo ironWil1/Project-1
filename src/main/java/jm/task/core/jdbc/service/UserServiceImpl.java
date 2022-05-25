@@ -11,27 +11,27 @@ import java.sql.Statement;
 import java.util.List;
 
 public class UserServiceImpl implements UserService {
-    public void createUsersTable()  {
-        new UserDaoJDBCImpl().createUsersTable();
-    }
+    private final UserDaoJDBCImpl userJDBCimpl = new UserDaoJDBCImpl();
+
+    public void createUsersTable()  {userJDBCimpl.createUsersTable();}
 
     public void dropUsersTable() {
-        new UserDaoJDBCImpl().dropUsersTable();
+        userJDBCimpl.dropUsersTable();
     }
 
     public void saveUser(String name, String lastName, byte age) {
-        new UserDaoJDBCImpl().saveUser(name,lastName,age);
+        userJDBCimpl.saveUser(name,lastName,age);
     }
 
     public void removeUserById(long id) {
-        new UserDaoJDBCImpl().removeUserById(id);
+        userJDBCimpl.removeUserById(id);
     }
 
     public List<User> getAllUsers() {
-        return new UserDaoJDBCImpl().getAllUsers();
+        return userJDBCimpl.getAllUsers();
     }
 
     public void cleanUsersTable() {
-        new UserDaoJDBCImpl().cleanUsersTable();
+        userJDBCimpl.cleanUsersTable();
     }
 }

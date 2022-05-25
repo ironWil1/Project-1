@@ -13,6 +13,7 @@ public class UserDaoJDBCImpl implements UserDao {
     public UserDaoJDBCImpl() {
 
     }
+    Connection con = Util.getConnection();
 
     public void createUsersTable() {
         String user_table = "CREATE TABLE `jdbc_kata_task`.`user` ("
@@ -21,8 +22,7 @@ public class UserDaoJDBCImpl implements UserDao {
                 +"`lastName` VARCHAR(50) NOT NULL,"
                 +"`age` MEDIUMINT(120) UNSIGNED NOT NULL,"
                 +"PRIMARY KEY (`id`));";
-        try(Connection con = Util.getConnection();
-            Statement statement = con.createStatement()) {
+        try(Statement statement = con.createStatement()) {
             statement.executeUpdate(user_table);
             System.out.println("Таблица Юзеров создана");
         } catch (SQLException e) {
@@ -32,8 +32,7 @@ public class UserDaoJDBCImpl implements UserDao {
 
     public void dropUsersTable() {
         String delete_table = "DROP TABLE user;";
-        try(Connection con = Util.getConnection();
-            Statement statement = con.createStatement()) {
+        try(Statement statement = con.createStatement()) {
             statement.executeUpdate(delete_table);
             System.out.println("Таблица удалена из БД");
         } catch (SQLException e) {
@@ -46,8 +45,7 @@ public class UserDaoJDBCImpl implements UserDao {
                 + name + "', " + "'"
                 + lastName + "'," + "'"
                 + age + "');";
-        try(Connection con = Util.getConnection();
-            Statement statement = con.createStatement()) {
+        try(Statement statement = con.createStatement()) {
             statement.executeUpdate(add_User);
             System.out.println("User с именем - " + name + " был добавлен в БД");
         } catch (SQLException e) {
@@ -57,8 +55,7 @@ public class UserDaoJDBCImpl implements UserDao {
 
     public void removeUserById(long id) {
         String remove_User = "DELETE FROM user WHERE ID =" + id + ";";
-        try(Connection con = Util.getConnection()) {
-            Statement statement = con.createStatement();
+        try(Statement statement = con.createStatement()) {
             statement.executeUpdate(remove_User);
             System.out.println("User с ID " + id + " удален из таблицы");
         } catch (SQLException e) {
@@ -71,8 +68,7 @@ public class UserDaoJDBCImpl implements UserDao {
 
         String get_all_users = "SELECT * FROM user;";
 
-        try(Connection con = Util.getConnection()) {
-            PreparedStatement prepareStatement = con.prepareStatement(get_all_users);
+        try(PreparedStatement prepareStatement = con.prepareStatement(get_all_users)) {
             ResultSet resultset = prepareStatement.executeQuery();
             while(resultset.next()) {
                 User user = new User();
@@ -86,14 +82,12 @@ public class UserDaoJDBCImpl implements UserDao {
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
-
         return listOfUsers;
     }
 
     public void cleanUsersTable() {
         String clean_table = "TRUNCATE TABLE user;";
-        try(Connection con = Util.getConnection()) {
-            Statement statement = con.createStatement();
+        try(Statement statement = con.createStatement()) {
             statement.executeUpdate(clean_table);
             System.out.println("Таблица очищена");
         } catch (SQLException e) {
